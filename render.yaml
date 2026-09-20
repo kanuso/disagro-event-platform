@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: disagro-event-platform-backend
+    runtime: docker
+    plan: free
+    region: ohio
+    branch: main
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_Inofi24kHqEJ@ep-lingering-butterfly-b5q4udbl-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - key: JWT_SECRET
+        value: disagro-secret-key-min-32-chars-cambia-esto-en-prod
+      - key: PORT
+        value: "3000"
+      - key: FRONTEND_URL
+        value: https://disagro-event-platform.vercel.app
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
