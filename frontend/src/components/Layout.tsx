@@ -18,31 +18,31 @@ const menuItems = [
     label: "Dashboard",
     icon: LayoutDashboard,
   },
-  {
-    path: "/clients",
-    label: "Clientes",
-    icon: Users,
-  },
-  {
-    path: "/services",
-    label: "Servicios",
-    icon: Wrench,
-  },
-  {
-    path: "/products",
-    label: "Productos",
-    icon: Package,
-  },
+  // {
+  //   path: "/clients",
+  //   label: "Clientes",
+  //   icon: Users,
+  // },
+  // {
+  //   path: "/services",
+  //   label: "Servicios",
+  //   icon: Wrench,
+  // },
+  // {
+  //   path: "/products",
+  //   label: "Productos",
+  //   icon: Package,
+  // },
   {
     path: "/attendances",
     label: "Asistencias",
     icon: ClipboardCheck,
   },
-  {
-    path: "/reports",
-    label: "Reportes",
-    icon: BarChart3,
-  },
+  // {
+  //   path: "/reports",
+  //   label: "Reportes",
+  //   icon: BarChart3,
+  // },
     {
     path: "/evento",
     label: "Evento",
