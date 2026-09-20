@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// USUARIOS (Plus: autenticación)
+// ============================================================
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("OPERATOR") // OPERATOR | ADMIN
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// CLIENTES
+// ============================================================
+model Client {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  phone       String?
+  company     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  attendances Attendance[]
+
+  @@index([email])
+}
+
+// ============================================================
+// SERVICIOS
+// ============================================================
+model Service {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal             @db.Decimal(10, 2)
+  active      Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  attendances AttendanceService[]
+
+  @@index([active])
+}
+
+// ============================================================
+// PRODUCTOS
+// ============================================================
+model Product {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal             @db.Decimal(10, 2)
+  active      Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  attendances AttendanceProduct[]
+
+  @@index([active])
+}
+
+// ============================================================
+// ASISTENCIAS
+// ============================================================
+enum AttendanceStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Attendance {
+  id       Int              @id @default(autoincrement())
+  clientId Int
+  status   AttendanceStatus @default(PENDING)
+
+  // ---- Montos (congelados al crear) ----
+  subtotal            Decimal @db.Decimal(10, 2)
+  servicesSubtotal    Decimal @db.Decimal(10, 2) @default(0)
+  productsSubtotal    Decimal @db.Decimal(10, 2) @default(0)
+  servicesDiscountPct Decimal @db.Decimal(5, 2)  @default(0)
+  productsDiscountPct Decimal @db.Decimal(5, 2)  @default(0)
+  discountPercentage  Decimal @db.Decimal(5, 2)  @default(0)
+  discountAmount      Decimal @db.Decimal(10, 2) @default(0)
+  total               Decimal @db.Decimal(10, 2)
+
+  // ---- Timestamps de ciclo de vida ----
+  confirmedAt DateTime?
+  cancelledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // ---- Relaciones ----
+  client   Client              @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  services AttendanceService[]
+  products AttendanceProduct[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================================
+// PIVOTES: Servicios y Productos por asistencia
+// ============================================================
+// Usamos PK compuesta (attendanceId + serviceId) para evitar duplicados.
+// Guardamos `unitPrice` para preservar el precio histórico al momento
+// de crear la asistencia (si el precio del servicio cambia luego, no afecta).
+model AttendanceService {
+  attendanceId Int
+  serviceId    Int
+  quantity     Int     @default(1)
+  unitPrice    Decimal @db.Decimal(10, 2)
+
+  attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  service    Service    @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@id([attendanceId, serviceId])
+  @@index([serviceId])
+}
+
+model AttendanceProduct {
+  attendanceId Int
+  productId    Int
+  quantity     Int     @default(1)
+  unitPrice    Decimal @db.Decimal(10, 2)
+
+  attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@id([attendanceId, productId])
+  @@index([productId])
+}
