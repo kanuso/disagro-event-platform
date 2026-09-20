@@ -22,13 +22,13 @@ function App() {
         {/* ========== RUTAS ADMIN (con layout) ========== */}
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/clients" element={<Clients />} />
+          {/* <Route path="/clients" element={<Clients />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/products" element={<Products />} />
+          <Route path="/products" element={<Products />} /> */}
           <Route path="/attendances" element={<Attendances />} />
-          <Route path="/reports" element={<Reports />} />
+          {/* <Route path="/reports" element={<Reports />} /> */}
           <Route path="/evento" element={<PublicAttendanceForm />} />
-          <Route path="/evento/confirmacion/:id" element={<Portfolio />} />
+          {/* <Route path="/evento/confirmacion/:id" element={<Portfolio />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
