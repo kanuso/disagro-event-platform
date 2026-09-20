@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
 import Dashboard from "./pages/Dashboard";
-import Clients from "./pages/Clients";
-import Services from "./pages/Services";
-import Products from "./pages/Products";
+// import Clients from "./pages/Clients";
+// import Services from "./pages/Services";
+// import Products from "./pages/Products";
 import Attendances from "./pages/Attendances";
-import Reports from "./pages/Reports";
+// import Reports from "./pages/Reports";
 import PublicAttendanceForm from "./pages/PublicAttendanceForm";
 import Portfolio from "./pages/Portfolio";
 
