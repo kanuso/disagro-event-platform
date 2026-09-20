@@ -291,7 +291,7 @@ class AttendanceService {
       status: attendance.status,
       createdAt: attendance.createdAt,
       confirmedAt: attendance.confirmedAt,
-      eventDate: '2025-12-15', // ← ajústalo cuando definas la fecha
+      eventDate: '2026-12-15', // ← ajústalo cuando definas la fecha
 
       client: {
         id: attendance.client.id,
